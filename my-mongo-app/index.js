@@ -1,15 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // Configurare Express
 const app = express();
 app.use(bodyParser.json());
 
-// Conexiune la MongoDB
-//aici se pune un .env file dar ca sa fim mai rapizi mergem cu el hardcodat
-const uri = 'mongodb+srv://alex:alex@cluster0.x2rho.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0e'; // Schimbă cu URL-ul tău MongoDB
+// Enable CORS for all routes
+app.use(cors());
 
+// Conexiune la MongoDB
+const uri = 'mongodb+srv://alex:alex@cluster0.x2rho.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0e';
 
 mongoose.connect(uri)
     .then(() => console.log('Conexiune reușită la MongoDB'))
@@ -57,7 +59,7 @@ app.put('/update/:id', async (req, res) => {
         const updatedObject = await ObjectModel.findByIdAndUpdate(
             req.params.id,
             { mesajalerta, latitudine, longitudine, datataUltimuluiUpdate: Date.now() },
-            { new: true } // Returnează obiectul actualizat
+            { new: true }
         );
         
         if (!updatedObject) return res.status(404).send('Obiectul nu a fost găsit');
