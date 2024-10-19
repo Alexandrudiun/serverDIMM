@@ -86,7 +86,6 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-
 // Ruta pentru a obține un obiect după ID
 app.get('/get/:id', async (req, res) => {
     try {
@@ -103,6 +102,24 @@ app.get('/getall', async (req, res) => {
     try {
         const objects = await ObjectModel.find();
         res.json(objects);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Noua rută pentru actualizarea doar a mesajului de alertă
+app.patch('/update-alert/:id', async (req, res) => {
+    const { mesajalerta } = req.body;
+    
+    try {
+        const updatedObject = await ObjectModel.findByIdAndUpdate(
+            req.params.id,
+            { mesajalerta, datataUltimuluiUpdate: Date.now() },
+            { new: true }
+        );
+        
+        if (!updatedObject) return res.status(404).send('Obiectul nu a fost găsit');
+        res.json(updatedObject);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
