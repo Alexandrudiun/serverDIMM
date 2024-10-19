@@ -45,7 +45,12 @@ app.post('/register', async (req, res) => {
     
     try {
         const savedObject = await newObject.save();
-        res.status(201).json(savedObject);
+        
+        // Răspuns personalizat cu ID-ul obiectului salvat
+        res.status(201).json({
+            message: 'successfully',
+            id: savedObject._id, 
+        });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
